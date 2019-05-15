@@ -1,6 +1,6 @@
 <?php
 
-function tghpcontact_custom_post_types()
+function tghpcontact_custom_post_types_and_taxonomies()
 {
     register_post_type('contact_submission', array(
         'label' => __('Contact Submission'),
@@ -37,6 +37,32 @@ function tghpcontact_custom_post_types()
         'rewrite' => false,
         'menu_icon' => 'dashicons-email',
     ));
+
+    register_taxonomy(
+        'contact_submission_form',
+        'contact_submission',
+        array(
+            'hierarchical' => false,
+            'labels' => array(
+                'name'              => __('Form', 'tghpcontact'),
+                'singular_name'     => __('Form', 'tghpcontact'),
+                'search_items'      => __('Search Forms', 'tghpcontact'),
+                'all_items'         => __('All Forms', 'tghpcontact'),
+                'parent_item'       => __('Parent Form', 'tghpcontact'),
+                'parent_item_colon' => __('Parent Form:', 'tghpcontact'),
+                'edit_item'         => __('Edit Form', 'tghpcontact'),
+                'update_item'       => __('Update Form', 'tghpcontact'),
+                'add_new_item'      => __('Add New Form', 'tghpcontact'),
+                'new_item_name'     => __('New Form Name', 'tghpcontact'),
+                'menu_name'         => __('Form', 'tghpcontact'),
+            ),
+            'show_ui' => false,
+            'show_in_menu' => false,
+            'show_admin_column' => true,
+            'query_var' => false,
+            'rewrite' => false
+        )
+    );
 }
 
-add_action('init', 'tghpcontact_custom_post_types', 0);
+add_action('init', 'tghpcontact_custom_post_types_and_taxonomies', 0);

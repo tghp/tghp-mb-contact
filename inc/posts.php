@@ -5,7 +5,14 @@
  */
 function tghpcontact_pre_process ($data, $config)
 {
-    $data['post_title'] = sprintf('%s - %s', $_POST[TGHP_CONTACT_META_PREFIX . 'name'], date('d m Y'));
+    $metaBox = tghpcontact_get_contact_metabox($config['id']);
+
+    $data['post_title'] = sprintf('%s - %s', $metaBox->title, date('d m Y'));
+
+    $id = $config['id'];
+    $data['tax_input'] = array(
+        'contact_submission_form' => array($id)
+    );
 
     return $data;
 }

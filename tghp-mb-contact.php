@@ -17,7 +17,7 @@ include_once 'inc/email.php';
 include_once 'inc/frontend.php';
 include_once 'inc/admin.php';
 
-function tghpcontact_form()
+function tghpcontact_form($id = 'contact_submission')
 {
-    echo do_shortcode('[mb_frontend_form id="contact_submission"]');
+    echo do_shortcode("[mb_frontend_form id=\"{$id}\"]");
 }
