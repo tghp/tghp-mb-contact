@@ -15,6 +15,7 @@ include_once 'inc/settings.php';
 include_once 'inc/posts.php';
 include_once 'inc/email.php';
 include_once 'inc/frontend.php';
+include_once 'inc/admin.php';
 
 function tghpcontact_form()
 {
