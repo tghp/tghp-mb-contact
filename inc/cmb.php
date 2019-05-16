@@ -45,11 +45,13 @@ function tghpcontact_meta_boxes($meta_boxes)
 
         foreach($contactFields as &$field) {
             $field['id'] = TGHP_CONTACT_META_PREFIX . $field['id'];
+            $field['class'] = $field['class'] . sprintf(' field-%s', str_replace(TGHP_CONTACT_META_PREFIX, '', $field['id']));
         }
 
         $meta_boxes[] = array(
             'id' => $_formID,
             'title' => $_form['title'],
+            'class' => $_formID,
             'post_types' => 'contact_submission',
             'tghp_contact' => true,
             'include' => array(
