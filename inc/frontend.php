@@ -1,5 +1,13 @@
 <?php
 
+function tghpcontact_mb_frontend_template_paths($file_paths) {
+    array_unshift($file_paths, TGHP_PLUGIN_DIR . 'templates/mb-frontend-submission');
+
+    return $file_paths;
+}
+
+add_filter('mb_frontend_template_paths', 'tghpcontact_mb_frontend_template_paths', 10, 1);
+
 function tghpcontact_scroll_to_form() {
     ?>
     <script type="text/javascript">

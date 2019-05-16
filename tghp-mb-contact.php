@@ -7,11 +7,13 @@ Version: 1.0.0
 Network: False
 */
 
-const TGHP_CONTACT_META_PREFIX = '_tghpcontact_';
+define('TGHP_CONTACT_META_PREFIX', '_tghpcontact_');
+define('TGHP_PLUGIN_DIR', plugin_dir_path(__FILE__));
 
 include_once 'inc/cpt.php';
 include_once 'inc/cmb.php';
 include_once 'inc/settings.php';
+include_once 'inc/validation.php';
 include_once 'inc/posts.php';
 include_once 'inc/email.php';
 include_once 'inc/frontend.php';
