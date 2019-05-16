@@ -1,5 +1,29 @@
 <?php
 
+/**
+ * @param RW_Meta_Box $metaBox
+ */
+function tghpcontact_rwmb_before_wrapper($metaBox) {
+    if(is_admin()) {
+        return;
+    }
+
+    printf('<div class="rwmb-form-fields" id="form_%s">', $metaBox->id);
+}
+add_filter('rwmb_before', 'tghpcontact_rwmb_before_wrapper');
+
+/**
+ * @param $metaBox
+ */
+function tghpcontact_rwmb_after_wrapper($metaBox) {
+    if(is_admin()) {
+        return;
+    }
+
+    echo '</div>';
+}
+add_filter('rwmb_after', 'tghpcontact_rwmb_after_wrapper');
+
 function tghpcontact_mb_frontend_template_paths($file_paths) {
     array_unshift($file_paths, TGHP_PLUGIN_DIR . 'templates/mb-frontend-submission');
 
