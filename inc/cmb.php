@@ -46,6 +46,18 @@ function tghpcontact_meta_boxes($meta_boxes)
         foreach($contactFields as &$field) {
             $field['id'] = TGHP_CONTACT_META_PREFIX . $field['id'];
             $field['class'] = $field['class'] . sprintf(' field-%s', str_replace(TGHP_CONTACT_META_PREFIX, '', $field['id']));
+
+            if($field['required']) {
+                if($field['type'] === 'select') {
+                    if(isset($field['options'][''])) {
+                        $field['options'][''] .= '*';
+                    } else {
+                        $field['options'][array_keys($field['options'])[0]] .= '*';
+                    }
+                } else {
+                    $field['name'] .= '*';
+                }
+            }
         }
 
         $meta_boxes[] = array(
