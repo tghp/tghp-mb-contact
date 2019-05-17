@@ -17,3 +17,14 @@ function tghpcontact_pre_process ($data, $config)
     return $data;
 }
 add_filter('rwmb_frontend_insert_post_data', 'tghpcontact_pre_process', 10, 2);
+
+/**
+ * After creation
+ */
+function tghpcontact_after_process ($config, $postId)
+{
+    $id = $config['id'];
+    do_action('tghpcontact_after_process', $id, $postId);
+    do_action("tghpcontact_after_process_{$id}", $postId);
+}
+add_filter('rwmb_frontend_after_process', 'tghpcontact_after_process', 10, 2);
