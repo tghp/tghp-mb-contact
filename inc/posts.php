@@ -9,9 +9,8 @@ function tghpcontact_pre_process ($data, $config)
 
     $data['post_title'] = sprintf('%s - %s', $metaBox->title, date('d m Y'));
 
-    $id = $config['id'];
     $data['tax_input'] = array(
-        'contact_submission_form' => array($id)
+        'contact_submission_form' => array($metaBox->id)
     );
 
     return $data;
