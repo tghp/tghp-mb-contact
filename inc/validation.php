@@ -16,25 +16,18 @@ function tghpcontact_validate_request() {
     }
 
     foreach($metaBox->fields as $_field) {
-        if($_field['type'] === 'file') {
-            if(isset($_FILES["_file_{$_field['id']}"])) {
-                $file = $_FILES["_file_{$_field['id']}"];
+        $class = implode('_', array_map('ucwords', explode('_', $_field['type'])));
+        $validatorClass = "TGHPContact_Validator_{$class}";
 
-                if(isset($_field['attributes']) && isset($_field['attributes']['accept'])) {
-                    $acceptedMimeTypes = array_map('trim', explode(',', $_field['attributes']['accept']));
-                    if(!in_array($file['type'][0], $acceptedMimeTypes)) {
-                        return new WP_Error('invalid', __('File type not allowed', 'tghpcontact'));
-                    }
-                }
-
-                if(isset($_field['max_file_size'])) {
-                    $fileSize = $file['size'][0] / 1000;
-
-                    if($fileSize > $_field['max_file_size']) {
-                        return new WP_Error('invalid', __('File too large', 'tghpcontact'));
-                    }
-                }
+        try {
+            /** @var TGHPContact_Validator_Abstract $validatorClass */
+            if(class_exists($validatorClass)) {
+                $validatorClass::validate($_field);
+            } else {
+                continue;
             }
+        } catch (Exception $e) {
+            return new WP_Error('form_invalid', $e->getMessage());
         }
     }
 

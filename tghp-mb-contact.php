@@ -7,9 +7,12 @@ Version: 1.0.0
 Network: False
 */
 
+define('TGHP_CONTACT_VERSION', '1.0.0');
 define('TGHP_CONTACT_META_PREFIX', '_tghpcontact_');
 define('TGHP_PLUGIN_DIR', plugin_dir_path(__FILE__));
+define('TGHP_PLUGIN_URL', plugin_dir_url(__FILE__));
 
+include_once 'inc/autoloader.php';
 include_once 'inc/cpt.php';
 include_once 'inc/cmb.php';
 include_once 'inc/settings.php';
