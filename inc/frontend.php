@@ -8,7 +8,11 @@ function tghpcontact_rwmb_before_wrapper($metaBox) {
         return;
     }
 
-    printf('<div class="rwmb-form-fields" id="form_%s">', $metaBox->id);
+    printf(
+        '<div class="rwmb-form-fields%s" id="form_%s">',
+        $metaBox->class ? " {$metaBox->class}" : '',
+        $metaBox->id
+    );
 }
 add_filter('rwmb_before', 'tghpcontact_rwmb_before_wrapper');
 

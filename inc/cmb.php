@@ -51,7 +51,7 @@ function tghpcontact_meta_boxes($meta_boxes)
         $meta_boxes[] = array(
             'id' => $_formID,
             'title' => $_form['title'],
-            'class' => $_formID,
+            'class' => 'form',
             'post_types' => 'contact_submission',
             'tghp_contact' => true,
             'include' => array(
