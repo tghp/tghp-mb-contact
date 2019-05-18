@@ -58,6 +58,11 @@ function tghpcontact_meta_boxes($meta_boxes)
                     $field['name'] .= '*';
                 }
             }
+
+            if($field['type'] === 'recaptcha') {
+                $field['site_key'] = getenv(sprintf('RECAPTCHA_KEY_SITE_%s', strtoupper($_formID)));
+                $field['secret_key'] = getenv(sprintf('RECAPTCHA_KEY_SECRET_%s', strtoupper($_formID)));
+            }
         }
 
         $meta_boxes[] = array(
