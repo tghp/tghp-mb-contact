@@ -27,3 +27,8 @@ function tghpcontact_after_process ($config, $postId)
     do_action("tghpcontact_after_process_{$id}", $postId);
 }
 add_filter('rwmb_frontend_after_process', 'tghpcontact_after_process', 10, 2);
+
+function tghpcontact_get_submission_data ($postId, $key)
+{
+    return get_post_meta($postId, '_tghpcontact_' . $key, true);
+}
