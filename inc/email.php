@@ -8,23 +8,24 @@ function tghpcontact_email_notify($config, $post_id)
         return;
     }
 
-    if(!property_exists($metaBox, 'tghp_contact') || $metaBox->tghp_contact !== true) {
+    if(!$metaBox->tghp_contact) {
         return;
     }
 
-    if(property_exists($metaBox, 'email') && property_exists($metaBox->email, 'title')) {
-        $title = $metaBox->email->title;
+    if($metaBox->email && isset($metaBox->email['title'])) {
+        $title = $metaBox->email['title'];
     } elseif (tghpcontact_setting('title')) {
         $title = tghpcontact_setting('title');
     } else {
         $title = 'Contact Form Submission';
     }
 
-    if(property_exists($metaBox, 'email') && property_exists($metaBox->email, 'email')) {
-        $to = $metaBox->email->email;
+    if($metaBox->email && isset($metaBox->email['email'])) {
+        $to = $metaBox->email['email'];
     } else {
         $to = tghpcontact_setting('to_email');
     }
+
 
     if(isset($to)) {
         $emailFields = array_filter($metaBox->fields, function ($field) {
@@ -35,6 +36,17 @@ function tghpcontact_email_notify($config, $post_id)
         foreach($emailFields as $_emailField) {
             $label = $_emailField['name'];
             $value = rwmb_meta($_emailField['id'], null, $post_id);
+
+            switch($_emailField['type']) {
+                case 'checkbox':
+                    $value = ($value == 1) ? 'yes' : 'no';
+                    break;
+            }
+
+            if(!$value) {
+                $value = '-';
+            }
+
             $output .= "<p><strong>{$label}</strong><br>{$value}</p>";
         }
 
