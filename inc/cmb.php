@@ -65,7 +65,7 @@ function tghpcontact_meta_boxes($meta_boxes)
             }
         }
 
-        $meta_boxes[] = array(
+        $metaBox = array(
             'id' => $_formID,
             'title' => $_form['title'],
             'class' => 'form',
@@ -78,6 +78,12 @@ function tghpcontact_meta_boxes($meta_boxes)
             ),
             'fields' => $contactFields,
         );
+
+        if(isset($_form['options'])) {
+            $metaBox = array_merge($metaBox, $_form['options']);
+        }
+
+        $meta_boxes[] = $metaBox;
     }
 
     return $meta_boxes;
