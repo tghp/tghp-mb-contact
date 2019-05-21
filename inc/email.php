@@ -41,6 +41,15 @@ function tghpcontact_email_notify($config, $post_id)
                 case 'checkbox':
                     $value = ($value == 1) ? 'yes' : 'no';
                     break;
+                case 'file':
+                    $value = wp_get_attachment_url(array_keys($value)[0]);
+                    break;
+            }
+
+            switch($_emailField['type']) {
+                case 'file':
+                    $value = sprintf('<a href="%1$s">%1$s</a>', $value);
+                    break;
             }
 
             if(!$value) {
@@ -54,6 +63,7 @@ function tghpcontact_email_notify($config, $post_id)
         $html = apply_filters('tghpcontact_email_content', $output, $config, $post_id);
 
         wp_mail($to, $title, $html, "Content-Type: text/html; charset=UTF-8");
+        die;
     }
 }
 add_action('rwmb_frontend_after_process', 'tghpcontact_email_notify', 10, 2);
