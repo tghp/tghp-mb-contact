@@ -25,11 +25,6 @@ jQuery( function ($) {
             $recaptcha.each(function () {
                 var $this = $(this);
 
-                console.log({
-                    'sitekey': $this.data('key'),
-                    'theme': 'light'
-                });
-
                 $this.data(
                     'recaptcha',
                     grecaptcha.render(
