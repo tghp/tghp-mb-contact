@@ -75,6 +75,10 @@ function tghpcontact_meta_boxes($meta_boxes)
             if($field['populate_after_error'] !== false && isset($_SESSION['rwmb_frontend_post']) && isset($_SESSION['rwmb_frontend_post'][$field['id']])) {
                 $field['std'] = $_SESSION['rwmb_frontend_post'][$field['id']];
             }
+
+            if(!empty($field['std'])) {
+                $field['class'] = $field['class'] . ' has-value';
+            }
         }
 
         $metaBox = array(
