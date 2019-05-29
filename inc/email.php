@@ -63,7 +63,6 @@ function tghpcontact_email_notify($config, $post_id)
         $html = apply_filters('tghpcontact_email_content', $output, $config, $post_id);
 
         wp_mail($to, $title, $html, "Content-Type: text/html; charset=UTF-8");
-        die;
     }
 }
 add_action('rwmb_frontend_after_process', 'tghpcontact_email_notify', 10, 2);
