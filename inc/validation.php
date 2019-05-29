@@ -9,7 +9,8 @@ function tghpcontact_validate_request() {
         return false;
     }
 
-    $metaBox = tghpcontact_get_contact_metabox($_POST['rwmb_form_config']['id']);
+    $id = $_POST['rwmb_form_config']['id'];
+    $metaBox = tghpcontact_get_contact_metabox($id);
 
     if(!$metaBox) {
         return false;
@@ -29,6 +30,15 @@ function tghpcontact_validate_request() {
         } catch (Exception $e) {
             return new WP_Error('form_invalid', $e->getMessage());
         }
+    }
+
+    $filteredError = false;
+    $filteredError = apply_filters('tghpcontact_during_process', $filteredError, $id);
+    $filteredError = apply_filters("tghpcontact_during_process_{$id}", $filteredError);
+
+    if(is_wp_error($filteredError)) {
+        /** @var $filteredError WP_Error */
+        return $filteredError;
     }
 
     return true;
@@ -51,6 +61,10 @@ add_filter('rwmb_frontend_redirect', 'tghpcontact_rwmb_frontend_redirect');
 function tghpcontact_rwmb_frontend_validate_file($is_valid, $config) {
     $validation = tghpcontact_validate_request();
 
-    return $validation === true || !is_wp_error(tghpcontact_validate_request());
+    if(is_wp_error($validation)) {
+        return $validation->get_error_message();
+    } else {
+        return $validation;
+    }
 }
 add_filter('rwmb_frontend_validate', 'tghpcontact_rwmb_frontend_validate_file', 10, 2);
