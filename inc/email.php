@@ -65,4 +65,4 @@ function tghpcontact_email_notify($config, $post_id)
         wp_mail($to, $title, $html, "Content-Type: text/html; charset=UTF-8");
     }
 }
-add_action('rwmb_frontend_after_process', 'tghpcontact_email_notify', 10, 2);
+add_action('rwmb_frontend_after_process', 'tghpcontact_email_notify', 100, 2);
