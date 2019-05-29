@@ -38,6 +38,10 @@ function tghpcontact_meta_boxes($meta_boxes)
 
     $contactForms = apply_filters('tghpcontact_forms', $contactForms);
 
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
     foreach($contactForms as $_formID => $_form) {
         $contactFields = $_form['fields'];
         $contactFields = apply_filters('tghpcontact_fields', $contactFields, $_form);
@@ -59,9 +63,17 @@ function tghpcontact_meta_boxes($meta_boxes)
                 }
             }
 
+            if($field['type'] === 'recaptcha' || $field['type'] === 'file') {
+                $field['populate_after_error'] = false;
+            }
+
             if($field['type'] === 'recaptcha') {
                 $field['site_key'] = getenv(sprintf('RECAPTCHA_KEY_SITE_%s', strtoupper($_formID)));
                 $field['secret_key'] = getenv(sprintf('RECAPTCHA_KEY_SECRET_%s', strtoupper($_formID)));
+            }
+
+            if($field['populate_after_error'] !== false && isset($_SESSION['rwmb_frontend_post']) && isset($_SESSION['rwmb_frontend_post'][$field['id']])) {
+                $field['std'] = $_SESSION['rwmb_frontend_post'][$field['id']];
             }
         }
 

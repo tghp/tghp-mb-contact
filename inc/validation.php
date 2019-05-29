@@ -5,10 +5,6 @@ function tghpcontact_validate_request() {
         return false;
     }
 
-    if(!$_GET['rwmb-form-submitted']) {
-        return false;
-    }
-
     $id = $_POST['rwmb_form_config']['id'];
     $metaBox = tghpcontact_get_contact_metabox($id);
 
@@ -45,26 +41,32 @@ function tghpcontact_validate_request() {
 }
 
 function tghpcontact_rwmb_frontend_redirect($url) {
-    $validation = tghpcontact_validate_request();
+    global $tghpcontact_rwmb_validation;
 
-    if(is_wp_error($validation)) {
-        $url = add_query_arg('rwmb-form-error', urlencode($validation->get_error_message()), $url);
+    if(is_wp_error($tghpcontact_rwmb_validation) || $tghpcontact_rwmb_validation === false) {
+        $url = add_query_arg('rwmb-form-error', '1', $url);
+        $_SESSION['rwmb_frontend_post'] = array_filter($_POST, 'tghpcontact_filter_input_values_from_post', ARRAY_FILTER_USE_KEY);
     } else {
         $url = remove_query_arg('rwmb-form-error', $url);
+        unset($_SESSION['rwmb_frontend_post']);
     }
 
     return $url;
 }
-
 add_filter('rwmb_frontend_redirect', 'tghpcontact_rwmb_frontend_redirect');
 
-function tghpcontact_rwmb_frontend_validate_file($is_valid, $config) {
-    $validation = tghpcontact_validate_request();
+function tghpcontact_filter_input_values_from_post($key) {
+    return strpos($key, '_tghpcontact') === 0;
+}
 
-    if(is_wp_error($validation)) {
-        return $validation->get_error_message();
+function tghpcontact_rwmb_frontend_validate_file($is_valid, $config) {
+    global $tghpcontact_rwmb_validation;
+    $tghpcontact_rwmb_validation = tghpcontact_validate_request();
+
+    if(is_wp_error($tghpcontact_rwmb_validation)) {
+        return $tghpcontact_rwmb_validation->get_error_message();
     } else {
-        return $validation;
+        return $tghpcontact_rwmb_validation;
     }
 }
 add_filter('rwmb_frontend_validate', 'tghpcontact_rwmb_frontend_validate_file', 10, 2);
