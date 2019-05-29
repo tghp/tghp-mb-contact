@@ -40,7 +40,7 @@ function tghpcontact_validate_request() {
     return true;
 }
 
-function tghpcontact_rwmb_frontend_redirect($url) {
+function tghpcontact_rwmb_error_frontend_redirect($url) {
     global $tghpcontact_rwmb_validation;
 
     if(is_wp_error($tghpcontact_rwmb_validation) || $tghpcontact_rwmb_validation === false) {
@@ -53,7 +53,7 @@ function tghpcontact_rwmb_frontend_redirect($url) {
 
     return $url;
 }
-add_filter('rwmb_frontend_redirect', 'tghpcontact_rwmb_frontend_redirect');
+add_filter('rwmb_frontend_redirect', 'tghpcontact_rwmb_error_frontend_redirect');
 
 function tghpcontact_filter_input_values_from_post($key) {
     return strpos($key, '_tghpcontact') === 0;
