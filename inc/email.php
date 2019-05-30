@@ -44,6 +44,11 @@ function tghpcontact_email_notify($config, $post_id)
                 case 'file':
                     $value = wp_get_attachment_url(array_keys($value)[0]);
                     break;
+                case 'select':
+                    if(isset($_emailField['options']) && isset($_emailField['options'][$value])) {
+                        $value = sprintf('%s (%s)', $value, $_emailField['options'][$value]);
+                    }
+                    break;
             }
 
             switch($_emailField['type']) {
