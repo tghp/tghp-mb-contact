@@ -11,6 +11,10 @@ if (class_exists('RWMB_Field') && !class_exists('RWMB_Recaptcha_Field')) {
         }
 
         public static function html($meta, $field) {
+            if(is_admin()) {
+                return '';
+            }
+
             return sprintf(
                 '<div class="rwmb-recaptcha" id="%s" data-key="%s"></div>',
                 $field['id'],
