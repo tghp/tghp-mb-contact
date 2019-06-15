@@ -45,7 +45,7 @@ function tghpcontact_meta_boxes($meta_boxes)
     foreach($contactForms as $_formID => $_form) {
         $contactFields = $_form['fields'];
         $contactFields = apply_filters('tghpcontact_fields', $contactFields, $_form);
-        $contactFields = apply_filters("tghpcontact_fields_{$_form}", $contactFields);
+        $contactFields = apply_filters("tghpcontact_fields_{$_formID}", $contactFields);
 
         foreach($contactFields as &$field) {
             $field['id'] = TGHP_CONTACT_META_PREFIX . $field['id'];
