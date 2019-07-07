@@ -77,6 +77,14 @@ function tghpcontact_form_shortcode($attr) {
 }
 add_shortcode('tghpcontact_form', 'tghpcontact_form_shortcode');
 
+function tghpcontact_rwmb_shortcode_filter($output, $tag) {
+    if ($tag !== 'mb_frontend_form') {
+        return $output;
+    }
+    return preg_replace('/<form /', '<form autocomplete="off"', $output);
+}
+add_filter('do_shortcode_tag', 'tghpcontact_rwmb_shortcode_filter', 10, 2);
+
 /**
  * @param RW_Meta_Box $metaBox
  */
