@@ -128,12 +128,12 @@ function tghpcontact_scroll_to_form() {
                     return
                 }
 
-                if(window.location.search.match(/rwmb-form-submitted=([^&]*)/)) {
-                    var $confirmation = $('.rwmb-confirmation');
+                if(window.location.search.match(/rwmb-form-submitted=([^&]*)/) || window.location.search.match(/rwmb-form-error=([^&]*)/)) {
+                    var $message = $('.rwmb-confirmation, .rwmb-error');
 
-                    if($confirmation.length) {
+                    if($message.length) {
                         setTimeout(function () {
-                            $(window).scrollTop($confirmation.offset().top - 80);
+                            $(window).scrollTop($message.offset().top - 80);
                         }, 0);
                     }
                 }
