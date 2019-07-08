@@ -116,33 +116,33 @@ add_filter('rwmb_after', 'tghpcontact_rwmb_after_wrapper');
 function tghpcontact_scroll_to_form() {
     ?>
     <script type="text/javascript">
-        (function () {
+        (function ($) {
+            function offset(el) {
+                var rect = el.getBoundingClientRect(),
+                    scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                return rect.top + scrollTop;
+            }
+
             var checkAndScrollToForm = function () {
                 if(!window.location.search) {
                     return
                 }
 
-                var submitted = window.location.search.match(/rwmb-form-submitted=([^&]*)/);
+                if(window.location.search.match(/rwmb-form-submitted=([^&]*)/)) {
+                    var $confirmation = $('.rwmb-confirmation');
 
-                if(submitted) {
-                    var formFlag = document.querySelector('input[name="rwmb_form_config[id]"][value="' + submitted[1] + '"]');
-
-                    if(formFlag) {
-                        var form = formFlag.parentElement.parentElement;
-
+                    if($confirmation.length) {
                         setTimeout(function () {
-                            window.scrollTo(0, form.offsetTop);
+                            $(window).scrollTop($confirmation.offset().top - 80);
                         }, 0);
                     }
                 }
             };
 
-            if (document.attachEvent ? document.readyState === 'complete' : document.readyState !== 'loading'){
+            $(window).on('load', function () {
                 checkAndScrollToForm();
-            } else {
-                document.addEventListener('DOMContentLoaded', checkAndScrollToForm);
-            }
-        })();
+            });
+        })(jQuery);
     </script>
     <?php
 }
