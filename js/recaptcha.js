@@ -7,13 +7,13 @@ jQuery( function ($) {
         if(recaptchaLoaded) {
             callback();
         } else {
-            window.onRecaptchaLoad = function () {
+            window.tghpmbcontactOnRecaptchaLoad = function () {
                 recaptchaLoaded = true;
                 callback();
             };
 
             var scriptElement = document.createElement('script');
-            scriptElement.src = 'https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit';
+            scriptElement.src = 'https://www.google.com/recaptcha/api.js?onload=tghpmbcontactOnRecaptchaLoad&render=explicit';
             document.body.appendChild(scriptElement);
         }
     }
@@ -24,6 +24,14 @@ jQuery( function ($) {
         loadRecaptcha(function () {
             $recaptcha.each(function () {
                 var $this = $(this);
+
+                window[$this.data('callback')] = function (token) {
+                    $this.siblings('[name="recaptcha_fake"]').val(token).trigger('change');
+                };
+
+                window[$this.data('expired-callback')] = function () {
+                    $this.siblings('[name="recaptcha_fake"]').val('').trigger('change');
+                };
 
                 $this.data(
                     'recaptcha',

@@ -15,10 +15,14 @@ if (class_exists('RWMB_Field') && !class_exists('RWMB_Recaptcha_Field')) {
                 return '';
             }
 
+            $randomId = substr(uniqid('', true), -5);
+
             return sprintf(
-                '<div class="rwmb-recaptcha" id="%s" data-key="%s"></div>',
+                '<div class="rwmb-recaptcha" id="%1$s" data-key="%2$s" data-callback="tghpmbcontactOnRecaptchaSuccess%3$s" data-expired-callback="tghpmbcontactOnRecaptchaExpire%3$s"></div>%4$s',
                 $field['id'],
-                esc_attr( $field['site_key'] )
+                esc_attr( $field['site_key'] ),
+                $randomId,
+                '<input type="hidden" name="recaptcha_fake" required>'
             );
         }
 
