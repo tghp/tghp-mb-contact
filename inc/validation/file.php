@@ -7,6 +7,12 @@ class TGHPContact_Validator_File extends TGHPContact_Validator_Abstract {
         if(isset($_FILES["_file_{$field['id']}"])) {
             $file = $_FILES["_file_{$field['id']}"];
 
+            if(isset($field['required']) && $field['required']) {
+                if(count($file['name']) == 1 && empty($file['name'][0]) && count($file['type']) == 1 && empty($file['type'][0])) {
+                    throw new Exception('File missing: ' . $field['name']);
+                }
+            }
+
             if(isset($field['attributes']) && isset($field['attributes']['accept'])) {
                 $acceptedMimeTypes = array_map('trim', explode(',', $field['attributes']['accept']));
                 if(!in_array($file['type'][0], $acceptedMimeTypes)) {
