@@ -1,6 +1,18 @@
 <?php
 
 /**
+ * Enqueues
+ */
+function tghpcontact_frontend_scripts() {
+    if(is_admin()) {
+        return;
+    }
+
+    wp_enqueue_script('tghpcontact', TGHP_PLUGIN_URL . '/js/tghpcontact.js', array('jquery'), '1.0.0', true);
+}
+add_filter('wp_enqueue_scripts', 'tghpcontact_frontend_scripts');
+
+/**
  * Shortcode
  */
 function tghpcontact_form_shortcode($attr) {
@@ -112,38 +124,3 @@ function tghpcontact_rwmb_after_wrapper($metaBox) {
     echo '</div>';
 }
 add_filter('rwmb_after', 'tghpcontact_rwmb_after_wrapper');
-
-function tghpcontact_scroll_to_form() {
-    ?>
-    <script type="text/javascript">
-        (function ($) {
-            function offset(el) {
-                var rect = el.getBoundingClientRect(),
-                    scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                return rect.top + scrollTop;
-            }
-
-            var checkAndScrollToForm = function () {
-                if(!window.location.search) {
-                    return
-                }
-
-                if(window.location.search.match(/rwmb-form-submitted=([^&]*)/) || window.location.search.match(/rwmb-form-error=([^&]*)/)) {
-                    var $message = $('.rwmb-confirmation, .rwmb-error');
-
-                    if($message.length) {
-                        setTimeout(function () {
-                            $(window).scrollTop($message.offset().top - 80);
-                        }, 0);
-                    }
-                }
-            };
-
-            $(window).on('load', function () {
-                checkAndScrollToForm();
-            });
-        })(jQuery);
-    </script>
-    <?php
-}
-add_action('wp_footer', 'tghpcontact_scroll_to_form');
