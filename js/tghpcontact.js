@@ -1,4 +1,15 @@
 (function ($) {
+    var $form = $('.form');
+    $form.on('blur', 'input:not([type="checkbox"]), textarea', function () {
+        var $this = $(this);
+
+        if($this.val()) {
+            $this.addClass('has-value');
+        } else {
+            $this.removeClass('has-value');
+        }
+    });
+
     var checkAndScrollToForm = function () {
         if(!window.location.search) {
             return
