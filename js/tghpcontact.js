@@ -1,6 +1,6 @@
 (function ($) {
     var $form = $('.form');
-    $form.on('blur', 'input:not([type="checkbox"]), textarea', function () {
+    $form.on('blur', 'input:not([type="checkbox"]), textarea, select', function () {
         var $this = $(this);
 
         if($this.val()) {
