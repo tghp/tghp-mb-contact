@@ -5,7 +5,12 @@ function tghpcontact_validate_request() {
         return false;
     }
 
-    $id = $_POST['rwmb_form_config']['id'];
+    if(is_string($_POST['rwmb_form_config'])) {
+        $config = \MBFS\ConfigStorage::get($_POST['rwmb_form_config']);
+        $id = $config['id'];
+    } else {
+        $id = $_POST['rwmb_form_config']['id'];
+    }
     $metaBox = tghpcontact_get_contact_metabox($id);
 
     if(!$metaBox) {
