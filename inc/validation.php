@@ -1,48 +1,57 @@
 <?php
 
 function tghpcontact_validate_request() {
-    if(!$_POST['rwmb_submit']) {
-        return false;
-    }
+    $data = (array) $_POST;
 
-    if(is_string($_POST['rwmb_form_config'])) {
-        $config = \MBFS\ConfigStorage::get($_POST['rwmb_form_config']);
-        $id = $config['id'];
-    } else {
-        $id = $_POST['rwmb_form_config']['id'];
-    }
-    $metaBox = tghpcontact_get_contact_metabox($id);
-
-    if(!$metaBox) {
-        return false;
-    }
-
-    foreach($metaBox->fields as $_field) {
-        $class = implode('_', array_map('ucwords', explode('_', $_field['type'])));
-        $validatorClass = "TGHPContact_Validator_{$class}";
-
-        try {
-            /** @var TGHPContact_Validator_Abstract $validatorClass */
-            if(class_exists($validatorClass)) {
-                $validatorClass::validate($_field);
-            } else {
-                continue;
-            }
-        } catch (Exception $e) {
-            return new WP_Error('form_invalid', $e->getMessage());
+    if($data['rwmb_submit'] || $data['action'] === 'mbfs_submit') {
+        if (is_array($data['rwmb_form_config']) && isset($data['rwmb_form_config']['id'])) {
+            $id = filter_var($data['rwmb_form_config']['id'], FILTER_SANITIZE_STRING);
+        } else if (is_string($data['rwmb_form_config'])) {
+            $config_key = filter_var($data['rwmb_form_config'], FILTER_SANITIZE_STRING);
+            $config = \MBFS\ConfigStorage::get($config_key);
+            $id = $config['id'];
         }
+
+        if (isset($id)) {
+            $metaBox = tghpcontact_get_contact_metabox($id);
+        }
+
+        if (isset($id)) {
+            $metaBox = tghpcontact_get_contact_metabox($id);
+        }
+
+        if (!isset($metaBox) || !$metaBox) {
+            return false;
+        }
+
+        foreach ($metaBox->fields as $_field) {
+            $class = implode('_', array_map('ucwords', explode('_', $_field['type'])));
+            $validatorClass = "TGHPContact_Validator_{$class}";
+
+            try {
+                /** @var TGHPContact_Validator_Abstract $validatorClass */
+                if (class_exists($validatorClass)) {
+                    $validatorClass::validate($_field);
+                } else {
+                    continue;
+                }
+            } catch (Exception $e) {
+                return new WP_Error('form_invalid', $e->getMessage());
+            }
+        }
+
+        $filteredError = false;
+        $filteredError = apply_filters('tghpcontact_during_process', $filteredError, $id);
+        $filteredError = apply_filters("tghpcontact_during_process_{$id}", $filteredError);
+
+        if (is_wp_error($filteredError)) {
+            /** @var $filteredError WP_Error */
+            return $filteredError;
+        }
+
+        return true;
     }
-
-    $filteredError = false;
-    $filteredError = apply_filters('tghpcontact_during_process', $filteredError, $id);
-    $filteredError = apply_filters("tghpcontact_during_process_{$id}", $filteredError);
-
-    if(is_wp_error($filteredError)) {
-        /** @var $filteredError WP_Error */
-        return $filteredError;
-    }
-
-    return true;
+    return false;
 }
 
 function tghpcontact_rwmb_error_frontend_redirect($url) {
