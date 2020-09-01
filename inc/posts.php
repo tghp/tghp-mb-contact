@@ -20,10 +20,10 @@ function tghpcontact_after_process ($config, $postId)
 {
     $metaBox = tghpcontact_get_contact_metabox($config['id']);
 
+    wp_set_object_terms($postId, [$metaBox->id], 'contact_submission_form');
+
     do_action('tghpcontact_after_process', $metaBox->id, $postId);
     do_action("tghpcontact_after_process_{$metaBox->id}", $postId);
-
-    wp_set_object_terms($postId, [$metaBox->id], 'contact_submission_form');
 }
 add_filter('rwmb_frontend_after_process', 'tghpcontact_after_process', 10, 2);
 
