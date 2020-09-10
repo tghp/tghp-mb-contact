@@ -29,7 +29,14 @@ function tghpcontact_load_recaptcha_type() {
 }
 add_action('init', 'tghpcontact_load_recaptcha_type');
 
-function tghpcontact_form($id = 'contact_submission')
+function tghpcontact_form($id = 'contact_submission', $args = [])
 {
-    echo do_shortcode("[mb_frontend_form id=\"{$id}\"]");
+    $args['id'] = $id;
+
+    $shortcodeArgs = '';
+    foreach ($args as $key => $val) {
+        $shortcodeArgs .= "{$key}=\"{$val}\"";
+    }
+
+    echo do_shortcode("[mb_frontend_form {$shortcodeArgs}]");
 }
