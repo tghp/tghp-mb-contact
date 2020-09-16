@@ -51,15 +51,17 @@ function tghpcontact_meta_boxes($meta_boxes)
             $field['id'] = TGHP_CONTACT_META_PREFIX . $field['id'];
             $field['class'] = (isset($field['class']) ? $field['class'] : '') . sprintf(' field-%s', str_replace(TGHP_CONTACT_META_PREFIX, '', $field['id']));
 
-            if(isset($field['required']) && $field['required']) {
-                if($field['type'] === 'select') {
-                    if(isset($field['options'][''])) {
-                        $field['options'][''] .= '*';
+            if (version_compare(RWMB_VER, '5.2.4', '<')) {
+                if (isset($field['required']) && $field['required']) {
+                    if ($field['type'] === 'select') {
+                        if (isset($field['options'][''])) {
+                            $field['options'][''] .= '*';
+                        } else {
+                            $field['options'][array_keys($field['options'])[0]] .= '*';
+                        }
                     } else {
-                        $field['options'][array_keys($field['options'])[0]] .= '*';
+                        $field['name'] .= '*';
                     }
-                } else {
-                    $field['name'] .= '*';
                 }
             }
 
