@@ -9,7 +9,7 @@ function tghpcontact_meta_boxes($meta_boxes)
                 array(
                     'name' => 'Name',
                     'id' => 'name',
-                    'type' => 'input',
+                    'type' => 'text',
                     'required' => true,
                     'email' => true,
                 ),
@@ -23,7 +23,7 @@ function tghpcontact_meta_boxes($meta_boxes)
                 array(
                     'name' => 'Telephone',
                     'id' => 'telephone',
-                    'type' => 'input',
+                    'type' => 'text',
                     'email' => true,
                 ),
                 array(
