@@ -90,6 +90,7 @@ function tghpcontact_meta_boxes($meta_boxes)
             'class' => 'form',
             'post_types' => 'contact_submission',
             'tghp_contact' => true,
+            'tghp_send_email' => true,
             'include' => array(
                 'relation' => 'OR',
                 'contact_submission_form' => array($_formID),
@@ -100,6 +101,10 @@ function tghpcontact_meta_boxes($meta_boxes)
 
         if(isset($_form['options'])) {
             $metaBox = array_merge($metaBox, $_form['options']);
+        }
+
+        if(isset($_form['tghp_send_email']) && $_form['tghp_send_email'] === false) {
+            $metaBox['tghp_send_email'] = false;
         }
 
         $meta_boxes[] = $metaBox;

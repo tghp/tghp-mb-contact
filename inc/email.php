@@ -12,6 +12,10 @@ function tghpcontact_email_notify($config, $post_id)
         return;
     }
 
+    if(!$metaBox->tghp_send_email) {
+        return;
+    }
+
     if($metaBox->email && isset($metaBox->email['title'])) {
         $title = $metaBox->email['title'];
     } elseif (tghpcontact_setting('title')) {
