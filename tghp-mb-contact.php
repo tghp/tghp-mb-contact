@@ -38,5 +38,9 @@ function tghpcontact_form($id = 'contact_submission', $args = [])
         $shortcodeArgs .= "{$key}=\"{$val}\" ";
     }
 
-    echo do_shortcode("[mb_frontend_form {$shortcodeArgs}]");
+    ?>
+    <div class="tghpform tghpform--<?= $id ?>">
+        <?= do_shortcode("[mb_frontend_form {$shortcodeArgs}]"); ?>
+    </div>
+    <?php
 }
