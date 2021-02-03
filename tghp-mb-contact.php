@@ -38,9 +38,28 @@ function tghpcontact_form($id = 'contact_submission', $args = [])
         $shortcodeArgs .= "{$key}=\"{$val}\" ";
     }
 
+    ob_start();
     ?>
     <div class="tghpform tghpform--<?= $id ?>">
         <?= do_shortcode("[mb_frontend_form {$shortcodeArgs}]"); ?>
     </div>
     <?php
+    
+    $output = ob_get_clean();
+
+    $metabox = tghpcontact_get_contact_metabox($id);
+
+    if ($metabox->button_class) {
+        $output = preg_replace('/(<button.*?rwmb-button)/', "$1 {$metabox->button_class}", $output);
+    }
+
+    if ($metabox->submit_class) {
+        $output = preg_replace('/(<button.*rwmb-button[^"]*)(".*rwmb_submit)/', "$1 {$metabox->submit_class}$2", $output);
+    }
+
+    if ($metabox->submit_text_sr_only) {
+        $output = preg_replace('/("rwmb_submit"[^>]*>)([^<]*?)<\/button>/', "$1<span class=\"sr-only\">$2</span></button>", $output);
+    }
+
+    echo $output;
 }

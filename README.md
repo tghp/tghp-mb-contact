@@ -8,7 +8,10 @@ Key | Value
 `email->email` | Email address to send submisions to
 `email->title` | Title of the form
 `redirect` | URL to redirect to after submission
-`class` | Extra CSS classes to add to the form wrapper element  
+`class` | Extra CSS classes to add to the form wrapper element
+`button_class` | Extra CSS classes to add to buttons
+`submit_class` | Extra CSS classes to add to the submit button
+`submit_text_sr_only` | Wrap submit button in a .sr-only span
 
 ## Shortcode
 
