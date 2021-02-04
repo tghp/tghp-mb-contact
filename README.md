@@ -5,7 +5,7 @@ Re-usable plugin using metabox.io and MB Frontend Submission to provide code-pow
 ### `options`
 Key | Value
 --- | ---
-`delete_after_processing` | After all hooks are fired, delete the post. Useful for facilitating transient submissions utilising an integration and with no desire to store locally (e.g. newsletter subscriptions)
+`delete_after_processing` | After all hooks are fired, delete the post. Useful for facilitating transient submissions utilising an integration and with no desire to store locally (e.g. newsletter subscriptions).<br>Post will not be deleted in any case if `_tghpcontact_do_not_delete` metafield has a value of '1'. This can be used to prevent this deletion in case of a failure.
 `email->email` | Email address to send submisions to
 `email->title` | Title of the form
 `redirect` | URL to redirect to after submission

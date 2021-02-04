@@ -25,7 +25,7 @@ function tghpcontact_after_process ($config, $postId)
     do_action('tghpcontact_after_process', $metaBox->id, $postId);
     do_action("tghpcontact_after_process_{$metaBox->id}", $postId);
 
-    if ($metaBox->delete_after_processing) {
+    if ($metaBox->delete_after_processing && get_post_meta($postId, TGHP_CONTACT_META_PREFIX . 'do_not_delete', true) !== '1') {
         wp_delete_post($postId, true);
     }
 }
