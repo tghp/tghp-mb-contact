@@ -38,6 +38,22 @@ function tghpcontact_form($id = 'contact_submission', $args = [])
         $shortcodeArgs .= "{$key}=\"{$val}\" ";
     }
 
+    $metabox = tghpcontact_get_contact_metabox($id);
+
+    foreach (['ajax', 'confirmation'] as $copyFromOptionsToMetaboxKey) {
+        if ($metabox->$copyFromOptionsToMetaboxKey) {
+            $val = $metabox->$copyFromOptionsToMetaboxKey;
+
+            if ($val === true || $val === false) {
+                $val = $val ? 'true' : 'false';
+            }
+
+            $val = esc_attr($val);
+
+            $shortcodeArgs .= "{$copyFromOptionsToMetaboxKey}=\"{$val}\" ";
+        }
+    }
+
     ob_start();
     ?>
     <div class="tghpform tghpform--<?= $id ?>">
@@ -46,8 +62,6 @@ function tghpcontact_form($id = 'contact_submission', $args = [])
     <?php
     
     $output = ob_get_clean();
-
-    $metabox = tghpcontact_get_contact_metabox($id);
 
     if ($metabox->button_class) {
         $output = preg_replace('/(<button.*?rwmb-button)/', "$1 {$metabox->button_class}", $output);
