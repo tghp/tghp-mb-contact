@@ -24,6 +24,10 @@ function tghpcontact_after_process ($config, $postId)
 
     do_action('tghpcontact_after_process', $metaBox->id, $postId);
     do_action("tghpcontact_after_process_{$metaBox->id}", $postId);
+
+    if ($metaBox->delete_after_processing) {
+        wp_delete_post($postId, true);
+    }
 }
 add_filter('rwmb_frontend_after_process', 'tghpcontact_after_process', 10, 2);
 
