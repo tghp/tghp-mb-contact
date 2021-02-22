@@ -9,6 +9,7 @@ function tghpcontact_frontend_scripts() {
     }
 
     wp_enqueue_script('tghpcontact', TGHP_PLUGIN_URL . '/js/tghpcontact.js', array('jquery'), '1.0.0', true);
+    wp_enqueue_script('tghpcontact-scroll', TGHP_PLUGIN_URL . '/js/tghpcontact-scroll.js', array('jquery'), '1.0.0', true);
 }
 add_filter('wp_enqueue_scripts', 'tghpcontact_frontend_scripts');
 
