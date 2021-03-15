@@ -68,6 +68,7 @@ function tghpcontact_email_notify($config, $post_id)
             $output .= "<p><strong>{$label}</strong><br>{$value}</p>";
         }
 
+        $to = apply_filters('tghpcontact_email_to', $to, $config, $post_id);
         $title = apply_filters('tghpcontact_email_subject', $title, $config, $post_id);
         $html = apply_filters('tghpcontact_email_content', $output, $config, $post_id);
 
