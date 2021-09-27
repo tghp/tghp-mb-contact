@@ -15,6 +15,11 @@ Key | Value
 `submit_text_sr_only` | Wrap submit button in a .sr-only span
 `confirmation` | Confirmation message
 
+## Extra Metabox Field Parameters
+Key | Value
+--- | ---
+`email` | Boolean. Whether the field is added to the generated email 
+
 ## Shortcode
 
 `[tghpcontact_form]`
