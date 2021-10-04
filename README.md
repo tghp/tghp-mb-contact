@@ -13,6 +13,7 @@ Key | Value
 `button_class` | Extra CSS classes to add to buttons
 `submit_class` | Extra CSS classes to add to the submit button
 `submit_text_sr_only` | Wrap submit button in a .sr-only span
+`ajax` | Boolean. Enable AJAX for instances of the form 
 `confirmation` | Confirmation message
 
 ## Extra Metabox Field Parameters
