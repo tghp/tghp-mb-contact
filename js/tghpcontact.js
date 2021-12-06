@@ -1,12 +1,16 @@
 (function ($) {
     var $form = $('.form');
+    var hasValueClass = 'has-value';
+
     $form.on('blur', 'input:not([type="checkbox"]), textarea, select', function () {
         var $this = $(this);
 
         if($this.val()) {
-            $this.addClass('has-value');
+            $this.addClass(hasValueClass);
+            $this.parents('.rwmb-field').addClass(hasValueClass);
         } else {
-            $this.removeClass('has-value');
+            $this.removeClass(hasValueClass);
+            $this.parents('.rwmb-field').removeClass(hasValueClass);
         }
     });
 
