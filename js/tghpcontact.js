@@ -5,7 +5,7 @@
     $form.on('blur', 'input:not([type="checkbox"]), textarea, select', function () {
         var $this = $(this);
 
-        if($this.val()) {
+        if ($this.val()) {
             $this.addClass(hasValueClass);
             $this.parents('.rwmb-field').addClass(hasValueClass);
         } else {
@@ -15,14 +15,14 @@
     });
 
     var checkAndScrollToForm = function () {
-        if(!window.location.search) {
+        if (!window.location.search) {
             return
         }
 
-        if(window.location.search.match(/rwmb-form-submitted=([^&]*)/) || window.location.search.match(/rwmb-form-error=([^&]*)/)) {
+        if (window.location.search.match(/rwmb-form-submitted=([^&]*)/) || window.location.search.match(/rwmb-form-error=([^&]*)/)) {
             var $message = $('.rwmb-confirmation, .rwmb-error');
 
-            if($message.length) {
+            if ($message.length) {
                 $('body').trigger('tghpcontact:message-shown', $message.get(0));
             }
         }
