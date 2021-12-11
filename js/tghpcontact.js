@@ -1,8 +1,16 @@
 (function ($) {
     var $form = $('.form');
     var hasValueClass = 'has-value';
+    var inputSelector = 'input:not([type="checkbox"]), textarea, select';
 
-    $form.on('blur', 'input:not([type="checkbox"]), textarea, select', function () {
+    $form.on('focus', inputSelector, function () {
+        var $this = $(this);
+
+        $this.addClass(hasValueClass);
+        $this.parents('.rwmb-field').addClass(hasValueClass);
+    });
+
+    $form.on('blur', inputSelector, function () {
         var $this = $(this);
 
         if ($this.val()) {
