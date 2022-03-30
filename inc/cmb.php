@@ -70,8 +70,8 @@ function tghpcontact_meta_boxes($meta_boxes)
             }
 
             if($field['type'] === 'recaptcha') {
-                $field['site_key'] = getenv(sprintf('RECAPTCHA_KEY_SITE_%s', strtoupper($_formID)));
-                $field['secret_key'] = getenv(sprintf('RECAPTCHA_KEY_SECRET_%s', strtoupper($_formID)));
+                $field['site_key'] = $_ENV[sprintf('RECAPTCHA_KEY_SITE_%s', strtoupper($_formID))];
+                $field['secret_key'] = $_ENV[sprintf('RECAPTCHA_KEY_SECRET_%s', strtoupper($_formID))];
             }
 
             if(isset($field['populate_after_error']) && $field['populate_after_error'] !== false &&
