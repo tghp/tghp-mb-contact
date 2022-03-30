@@ -10,6 +10,9 @@ function tghpcontact_validate_request() {
             $config_key = filter_var($data['rwmb_form_config'], FILTER_SANITIZE_STRING);
             $config = \MBFS\ConfigStorage::get($config_key);
             $id = $config['id'];
+        } else {
+            $config = \MBFS\ConfigStorage::get($data['mbfs_key']);
+            $id = $config['id'];
         }
 
         if (isset($id)) {
@@ -76,6 +79,8 @@ function tghpcontact_filter_input_values_from_post($key) {
 function tghpcontact_rwmb_frontend_validate_file($is_valid, $config) {
     global $tghpcontact_rwmb_validation;
     $tghpcontact_rwmb_validation = tghpcontact_validate_request();
+
+    var_dump($tghpcontact_rwmb_validation);
 
     if(is_wp_error($tghpcontact_rwmb_validation)) {
         return $tghpcontact_rwmb_validation->get_error_message();
