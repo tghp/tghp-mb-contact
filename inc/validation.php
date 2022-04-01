@@ -80,8 +80,6 @@ function tghpcontact_rwmb_frontend_validate_file($is_valid, $config) {
     global $tghpcontact_rwmb_validation;
     $tghpcontact_rwmb_validation = tghpcontact_validate_request();
 
-    var_dump($tghpcontact_rwmb_validation);
-
     if(is_wp_error($tghpcontact_rwmb_validation)) {
         return $tghpcontact_rwmb_validation->get_error_message();
     } else {
