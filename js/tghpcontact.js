@@ -33,6 +33,12 @@
             if ($message.length) {
                 $('body').trigger('tghpcontact:message-shown', $message.get(0));
             }
+        } else {
+            var $error = $('.rwmb-error');
+
+            if ($error.length) {
+                $('body').trigger('tghpcontact:message-shown', $error.get(0));
+            }
         }
     };
 
