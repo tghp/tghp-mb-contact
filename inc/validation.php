@@ -1,9 +1,10 @@
 <?php
 
-function tghpcontact_validate_request() {
-    $data = (array) $_POST;
+function tghpcontact_validate_request()
+{
+    $data = (array)$_POST;
 
-    if($data['rwmb_submit'] || $data['action'] === 'mbfs_submit') {
+    if ($data['rwmb_submit'] || $data['action'] === 'mbfs_submit') {
         if (is_array($data['rwmb_form_config']) && isset($data['rwmb_form_config']['id'])) {
             $id = filter_var($data['rwmb_form_config']['id'], FILTER_SANITIZE_STRING);
         } else if (is_string($data['rwmb_form_config'])) {
@@ -57,10 +58,11 @@ function tghpcontact_validate_request() {
     return false;
 }
 
-function tghpcontact_rwmb_error_frontend_redirect($url) {
+function tghpcontact_rwmb_error_frontend_redirect($url)
+{
     global $tghpcontact_rwmb_validation;
 
-    if(is_wp_error($tghpcontact_rwmb_validation) || $tghpcontact_rwmb_validation === false) {
+    if (is_wp_error($tghpcontact_rwmb_validation) || $tghpcontact_rwmb_validation === false) {
         $url = add_query_arg('rwmb-form-error', '1', $url);
         $_SESSION['rwmb_frontend_post'] = array_filter($_POST, 'tghpcontact_filter_input_values_from_post', ARRAY_FILTER_USE_KEY);
     } else {
@@ -72,15 +74,17 @@ function tghpcontact_rwmb_error_frontend_redirect($url) {
 }
 add_filter('rwmb_frontend_redirect', 'tghpcontact_rwmb_error_frontend_redirect');
 
-function tghpcontact_filter_input_values_from_post($key) {
+function tghpcontact_filter_input_values_from_post($key)
+{
     return strpos($key, '_tghpcontact') === 0;
 }
 
-function tghpcontact_rwmb_frontend_validate_file($is_valid, $config) {
+function tghpcontact_rwmb_frontend_validate_file($is_valid, $config)
+{
     global $tghpcontact_rwmb_validation;
     $tghpcontact_rwmb_validation = tghpcontact_validate_request();
 
-    if(is_wp_error($tghpcontact_rwmb_validation)) {
+    if (is_wp_error($tghpcontact_rwmb_validation)) {
         return $tghpcontact_rwmb_validation->get_error_message();
     } else {
         return $tghpcontact_rwmb_validation;

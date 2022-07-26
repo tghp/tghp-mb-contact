@@ -24,9 +24,11 @@ include_once 'inc/email.php';
 include_once 'inc/frontend.php';
 include_once 'inc/admin.php';
 
-function tghpcontact_load_recaptcha_type() {
+function tghpcontact_load_recaptcha_type()
+{
     require 'inc/meta-box/fields/recaptcha.php';
 }
+
 add_action('init', 'tghpcontact_load_recaptcha_type');
 
 function tghpcontact_form($id = 'contact_submission', $args = [])
@@ -60,7 +62,7 @@ function tghpcontact_form($id = 'contact_submission', $args = [])
         <?= do_shortcode("[mb_frontend_form {$shortcodeArgs}]"); ?>
     </div>
     <?php
-    
+
     $output = ob_get_clean();
 
     if ($metabox->button_class) {
