@@ -55,20 +55,32 @@ function tghpcontact_email_format_value($field, $value)
     return $value;
 }
 
-function tghpcontact_email_notify($config, $post_id)
+function tghpcontact_email_notify($config, $post_id, $throw = false)
 {
     $metaBox = tghpcontact_get_contact_metabox($config['id']);
 
     if (!$metaBox) {
-        return;
+        if ($throw) {
+            throw new Exception('No metabox found');
+        }
+
+        return false;
     }
 
     if (!$metaBox->tghp_contact) {
-        return;
+        if ($throw) {
+            throw new Exception('Metabox missing tghpcontact flag');
+        }
+
+        return false;
     }
 
     if (!$metaBox->tghp_send_email) {
-        return;
+        if ($throw) {
+            throw new Exception('Metabox missing email send flag');
+        }
+
+        return false;
     }
 
     if ($metaBox->email && isset($metaBox->email['title'])) {
@@ -84,7 +96,6 @@ function tghpcontact_email_notify($config, $post_id)
     } else {
         $to = tghpcontact_setting('to_email');
     }
-
 
     if (isset($to)) {
         $emailFields = array_filter($metaBox->fields, function ($field) {
@@ -103,6 +114,52 @@ function tghpcontact_email_notify($config, $post_id)
         $html = apply_filters('tghpcontact_email_content', $output, $config, $post_id);
 
         wp_mail($to, $title, $html, "Content-Type: text/html; charset=UTF-8");
+
+        return true;
+    } else {
+        if ($throw) {
+            throw new Exception('No email to address found');
+        }
+
+        return false;
     }
 }
 add_action('rwmb_frontend_after_process', 'tghpcontact_email_notify', 100, 2);
+
+function admin_action_tghpcontact_resend_email()
+{
+    if (isset($_SERVER['HTTP_REFERER'])) {
+        $return = $_SERVER['HTTP_REFERER'];
+    } else {
+        $return = admin_url();
+    }
+
+    if (isset($_REQUEST['post']) && isset($_REQUEST['config'])) {
+        try {
+            $emailSuccess = tghpcontact_email_notify(
+                [ 'id' => $_REQUEST['config'], ],
+                $_REQUEST['post'],
+                true
+            );
+        } catch (Exception $e) {
+            $emailSuccess = false;
+            $error = $e->getMessage();
+        }
+
+        if (strpos($return, '?') === false) {
+            $return .= '?';
+        } else {
+            $return .= '&';
+        }
+
+        if ($emailSuccess) {
+            $return .= 'tghpcontact_email_sent=1';
+        } else {
+            $return .= 'tghpcontact_email_sent=0&tghpcontact_email_error=' . urlencode($error);
+        }
+    }
+
+    wp_redirect($return);
+    exit;
+}
+add_action('admin_action_tghpcontact-resend-email', 'admin_action_tghpcontact_resend_email');

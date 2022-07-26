@@ -108,6 +108,35 @@ function tghpcontact_meta_boxes($meta_boxes)
         }
 
         $meta_boxes[] = $metaBox;
+
+        if (is_admin()) {
+            $resendEmailUrl = admin_url(
+                sprintf('admin.php?action=tghpcontact-resend-email&post=%s&config=%s', $_GET['post'], $_formID)
+            );
+
+            $actionFields = array_filter(
+                [
+                    (isset($_GET['post']) && isset($metaBox['email'])) ? [
+                        'type' => 'custom_html',
+                        'std' => '<a href="' . $resendEmailUrl . '" class="button">' . __('Resend Email', 'tghpcontact') . '</a>',
+                    ] : null,
+                ]
+            );
+
+            if (count($actionFields)) {
+                $meta_boxes[] = [
+                    'id' => "{$_formID}_actions",
+                    'title' => __('Actions', 'tghpcontact'),
+                    'post_types' => 'contact_submission',
+                    'include' => [
+                        'relation' => 'OR',
+                        'contact_submission_form' => [$_formID],
+                        'custom' => 'tghpcontact_include_form_frontend',
+                    ],
+                    'fields' => $actionFields,
+                ];
+            }
+        }
     }
 
     return $meta_boxes;
