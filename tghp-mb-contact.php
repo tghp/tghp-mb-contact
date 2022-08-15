@@ -24,12 +24,13 @@ include_once 'inc/email.php';
 include_once 'inc/frontend.php';
 include_once 'inc/admin.php';
 
-function tghpcontact_load_recaptcha_type()
+function tghpcontact_load_types()
 {
     require 'inc/meta-box/fields/recaptcha.php';
+    require 'inc/meta-box/fields/dynamic-std-input.php';
 }
 
-add_action('init', 'tghpcontact_load_recaptcha_type');
+add_action('init', 'tghpcontact_load_types');
 
 function tghpcontact_form($id = 'contact_submission', $args = [])
 {
