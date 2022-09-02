@@ -137,6 +137,13 @@ function tghpcontact_meta_boxes($meta_boxes)
                 ];
             }
         }
+
+        add_action('init_graphql_request', function () use ($metaBox) {
+            add_action('graphql_register_types', function() use ($metaBox) {
+                tghpcontact_add_graphql_form_mutation($metaBox);
+            });
+        });
+
     }
 
     return $meta_boxes;

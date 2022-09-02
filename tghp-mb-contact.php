@@ -13,6 +13,7 @@ define('TGHP_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('TGHP_PLUGIN_URL', plugin_dir_url(__FILE__));
 
 include_once 'vendor/google/recaptcha/autoload.php';
+include_once 'inc/graphql.php';
 include_once 'inc/autoloader.php';
 include_once 'inc/cpt.php';
 include_once 'inc/cmb.php';
