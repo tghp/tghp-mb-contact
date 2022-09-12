@@ -4,7 +4,7 @@ use MBFS\FormFactory;
 use WPGraphQL\Extensions\MB;
 
 function tghpcontact_add_graphql_form_mutation($metaBox) {
-    $mutationType = 'tgphcontactForm' . ucfirst(MB::_graphql_label($metaBox['id']));
+    $mutationType = 'tghpcontactForm' . ucfirst(MB::_graphql_label($metaBox['id']));
 
     $inputFields = [];
     $graphQlIdToMetaboxId = [];
