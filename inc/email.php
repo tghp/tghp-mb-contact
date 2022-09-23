@@ -91,6 +91,8 @@ function tghpcontact_email_notify($config, $post_id, $throw = false)
         $title = 'Contact Form Submission';
     }
 
+    $contentTitle = apply_filters('tghpcontact_email_content_title', $title, $config, $post_id);
+
     if ($metaBox->email && isset($metaBox->email['email'])) {
         $to = $metaBox->email['email'];
     } else {
@@ -102,7 +104,9 @@ function tghpcontact_email_notify($config, $post_id, $throw = false)
             return !!$field['email'];
         });
 
-        $output = "<h1>{$title}</h1>";
+        $emailFields = apply_filters('tghpcontact_email_fields', $emailFields, $metaBox, $config, $post_id);
+
+        $output = "<h1>{$contentTitle}</h1>";
         foreach ($emailFields as $_emailField) {
             $label = tghpcontact_email_get_field_label($_emailField);
             $value = tghpcontact_email_format_value($_emailField, rwmb_meta($_emailField['id'], null, $post_id));
