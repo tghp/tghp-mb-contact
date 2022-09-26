@@ -16,6 +16,8 @@ function tghpcontact_email_get_field_label($field)
 
 function tghpcontact_email_format_value($field, $value)
 {
+    $originalValue = $value;
+
     switch ($field['type']) {
         case 'checkbox':
             $value = ($value == 1) ? 'yes' : 'no';
@@ -47,6 +49,9 @@ function tghpcontact_email_format_value($field, $value)
             $value = sprintf('<a href="%1$s">%1$s</a>', $value);
             break;
     }
+
+    $value = apply_filters("tghpcontact_email_field_format_value", $value, $originalValue, $field);
+    $value = apply_filters("tghpcontact_email_field_type_{$field['type']}_format_value", $value, $originalValue, $field);
 
     if (!$value) {
         $value = '-';
