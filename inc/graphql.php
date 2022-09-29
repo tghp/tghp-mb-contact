@@ -1,10 +1,19 @@
 <?php
 
 use MBFS\FormFactory;
-use WPGraphQL\Extensions\MB;
+
+function tghpcontact_graphql_label($input)
+{
+    $graphql_label = preg_replace('/[-_]/', ' ', $input);
+    $graphql_label = ucwords($graphql_label);
+    $graphql_label = preg_replace('/ /', '', $graphql_label);
+    $graphql_label = lcfirst($graphql_label);
+
+    return $graphql_label;
+}
 
 function tghpcontact_add_graphql_form_mutation($metaBox) {
-    $mutationType = 'tghpcontactForm' . ucfirst(MB::_graphql_label($metaBox['id']));
+    $mutationType = 'tghpcontactForm' . ucfirst(tghpcontact_graphql_label($metaBox['id']));
 
     $inputFields = [];
     $graphQlIdToMetaboxId = [];
@@ -14,7 +23,7 @@ function tghpcontact_add_graphql_form_mutation($metaBox) {
             continue;
         }
 
-        $graphQlId = MB::_graphql_label($field['id']);
+        $graphQlId = tghpcontact_graphql_label($field['id']);
         $graphQlIdToMetaboxId[$graphQlId] = $field['id'];
         $required = isset($field['required']) && !!$field['required'];
 
