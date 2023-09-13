@@ -106,6 +106,10 @@ function tghpcontact_email_notify($config, $post_id, $throw = false)
 
     if (isset($to)) {
         $emailFields = array_filter($metaBox->fields, function ($field) {
+            if (!isset($field['email'])) {
+                return false;
+            }
+            
             return !!$field['email'];
         });
 

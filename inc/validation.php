@@ -4,13 +4,15 @@ function tghpcontact_validate_request()
 {
     $data = (array)$_POST;
 
-    if ($data['rwmb_submit'] || $data['action'] === 'mbfs_submit') {
-        if (is_array($data['rwmb_form_config']) && isset($data['rwmb_form_config']['id'])) {
-            $id = filter_var($data['rwmb_form_config']['id'], FILTER_SANITIZE_STRING);
-        } else if (is_string($data['rwmb_form_config'])) {
-            $config_key = filter_var($data['rwmb_form_config'], FILTER_SANITIZE_STRING);
-            $config = \MBFS\ConfigStorage::get($config_key);
-            $id = $config['id'];
+    if (isset($data['rwmb_submit']) || $data['action'] === 'mbfs_submit') {
+        if (isset($data['rwmb_form_config'])) {
+            if (is_array($data['rwmb_form_config']) && isset($data['rwmb_form_config']['id'])) {
+                $id = filter_var($data['rwmb_form_config']['id'], FILTER_SANITIZE_STRING);
+            } else if (is_string($data['rwmb_form_config'])) {
+                $config_key = filter_var($data['rwmb_form_config'], FILTER_SANITIZE_STRING);
+                $config = \MBFS\ConfigStorage::get($config_key);
+                $id = $config['id'];
+            }
         } else {
             $config = \MBFS\ConfigStorage::get($data['mbfs_key']);
             $id = $config['id'];
