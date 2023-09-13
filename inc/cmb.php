@@ -48,10 +48,13 @@ function tghpcontact_meta_boxes($meta_boxes)
         $contactFields = apply_filters("tghpcontact_fields_{$_formID}", $contactFields);
 
         foreach ($contactFields as &$field) {
-            $field['id'] = TGHP_CONTACT_META_PREFIX . $field['id'];
+            if (isset($field['id'])) {
+                $field['id'] = TGHP_CONTACT_META_PREFIX . $field['id'];
+            }
+
             $field['class'] = (isset($field['class']) ? $field['class'] : '') . sprintf(' field-%s', str_replace(TGHP_CONTACT_META_PREFIX, '', $field['id']));
 
-            if (version_compare(RWMB_VER, '5.2.4', '<')) {
+            if (defined('RWMB_VER') && version_compare(RWMB_VER, '5.2.4', '<')) {
                 if (isset($field['required']) && $field['required']) {
                     if ($field['type'] === 'select') {
                         if (isset($field['options'][''])) {
@@ -110,18 +113,20 @@ function tghpcontact_meta_boxes($meta_boxes)
         $meta_boxes[] = $metaBox;
 
         if (is_admin()) {
-            $resendEmailUrl = admin_url(
-                sprintf('admin.php?action=tghpcontact-resend-email&post=%s&config=%s', $_GET['post'], $_formID)
-            );
+            if (isset($_GET['post'])) {
+                $resendEmailUrl = admin_url(
+                    sprintf('admin.php?action=tghpcontact-resend-email&post=%s&config=%s', $_GET['post'], $_formID)
+                );
 
-            $actionFields = array_filter(
-                [
-                    (isset($_GET['post']) && isset($metaBox['email'])) ? [
-                        'type' => 'custom_html',
-                        'std' => '<a href="' . $resendEmailUrl . '" class="button">' . __('Resend Email', 'tghpcontact') . '</a>',
-                    ] : null,
-                ]
-            );
+                $actionFields = array_filter(
+                    [
+                        (isset($_GET['post']) && isset($metaBox['email'])) ? [
+                            'type' => 'custom_html',
+                            'std' => '<a href="' . $resendEmailUrl . '" class="button">' . __('Resend Email', 'tghpcontact') . '</a>',
+                        ] : null,
+                    ]
+                );
+            }
 
             if (count($actionFields)) {
                 $meta_boxes[] = [
