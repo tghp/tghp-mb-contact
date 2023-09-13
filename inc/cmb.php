@@ -112,19 +112,21 @@ function tghpcontact_meta_boxes($meta_boxes)
         $meta_boxes[] = $metaBox;
 
         if (is_admin()) {
+            $actionFields = [];
+
             if (isset($_GET['post'])) {
                 $resendEmailUrl = admin_url(
                     sprintf('admin.php?action=tghpcontact-resend-email&post=%s&config=%s', $_GET['post'], $_formID)
                 );
 
-                $actionFields = array_filter(
+                $actionFields = array_merge($actionFields, array_filter(
                     [
                         (isset($_GET['post']) && isset($metaBox['email'])) ? [
                             'type' => 'custom_html',
                             'std' => '<a href="' . $resendEmailUrl . '" class="button">' . __('Resend Email', 'tghpcontact') . '</a>',
                         ] : null,
                     ]
-                );
+                ));
             }
 
             if (count($actionFields)) {
