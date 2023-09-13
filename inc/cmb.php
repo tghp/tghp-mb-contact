@@ -50,9 +50,8 @@ function tghpcontact_meta_boxes($meta_boxes)
         foreach ($contactFields as &$field) {
             if (isset($field['id'])) {
                 $field['id'] = TGHP_CONTACT_META_PREFIX . $field['id'];
+                $field['class'] = (isset($field['class']) ? $field['class'] : '') . sprintf(' field-%s', str_replace(TGHP_CONTACT_META_PREFIX, '', $field['id']));
             }
-
-            $field['class'] = (isset($field['class']) ? $field['class'] : '') . sprintf(' field-%s', str_replace(TGHP_CONTACT_META_PREFIX, '', $field['id']));
 
             if (defined('RWMB_VER') && version_compare(RWMB_VER, '5.2.4', '<')) {
                 if (isset($field['required']) && $field['required']) {
@@ -77,7 +76,7 @@ function tghpcontact_meta_boxes($meta_boxes)
                 $field['secret_key'] = $_ENV[sprintf('RECAPTCHA_KEY_SECRET_%s', strtoupper($_formID))];
             }
 
-            if (isset($field['populate_after_error']) && $field['populate_after_error'] !== false &&
+            if (isset($field['id']) && isset($field['populate_after_error']) && $field['populate_after_error'] !== false &&
                 isset($_SESSION['rwmb_frontend_post']) && isset($_SESSION['rwmb_frontend_post'][$field['id']])) {
                 $field['std'] = $_SESSION['rwmb_frontend_post'][$field['id']];
             }
