@@ -61,7 +61,9 @@ function tghpcontact_custom_post_types_and_taxonomies()
             'show_admin_column' => true,
             'query_var' => false,
             'rewrite' => false,
-            'publicly_queryable' => false
+            'has_archive' => false,
+            'exclude_from_search' => true,
+            'publicly_queryable' => false,
         ]
     );
 }
