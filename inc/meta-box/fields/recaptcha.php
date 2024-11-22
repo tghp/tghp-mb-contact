@@ -30,7 +30,7 @@ if (class_exists('RWMB_Field') && !class_exists('RWMB_Recaptcha_Field')) {
                     $field['id'],
                     esc_attr($field['site_key']),
                     $randomId,
-                    '<input type="hidden" name="recaptcha_fake" required>'
+                    '<input type="hidden" name="recaptcha_fake" required><input type="hidden" name="g-recaptcha-response" required>'
                 );
             }
 
