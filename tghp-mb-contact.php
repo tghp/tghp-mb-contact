@@ -3,11 +3,11 @@
 Plugin Name: TGHP Metabox Contact
 Description: Utilise MB Frontend Submission for contact forms
 Author: TGHP
-Version: 1.0.0
+Version: 1.3.0
 Network: False
 */
 
-define('TGHP_CONTACT_VERSION', '1.0.0');
+define('TGHP_CONTACT_VERSION', '1.3.0');
 define('TGHP_CONTACT_META_PREFIX', '_tghpcontact_');
 define('TGHP_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('TGHP_PLUGIN_URL', plugin_dir_url(__FILE__));
@@ -58,6 +58,19 @@ function tghpcontact_form($id = 'contact_submission', $args = [])
         }
     }
 
+    // For v3 recaptcha fields, hand the client side to MB Frontend Submission's
+    // native support (recaptcha_secret is deliberately not passed — verification
+    // stays with our validator, and siteverify tokens are single-use)
+    $recaptchaV3SiteKey = null;
+
+    foreach ($metabox->fields as $_field) {
+        if ($_field['type'] === 'recaptcha' && isset($_field['version']) && (int) $_field['version'] === 3) {
+            $recaptchaV3SiteKey = $_field['site_key'];
+            $shortcodeArgs .= sprintf('recaptcha_key="%s" ', esc_attr($recaptchaV3SiteKey));
+            break;
+        }
+    }
+
     ob_start();
     ?>
     <div class="tghpform tghpform--<?= $id ?>">
@@ -66,6 +79,21 @@ function tghpcontact_form($id = 'contact_submission', $args = [])
     <?php
 
     $output = ob_get_clean();
+
+    // Every MBFS form on the page re-localizes the shared mbFrontendForm global,
+    // so a later form without recaptcha clobbers recaptchaKey. The MBFS JS reads
+    // it at submit time, so restore it after load. Must run after do_shortcode —
+    // the mbfs handle is only registered once a form has rendered.
+    if ($recaptchaV3SiteKey) {
+        wp_add_inline_script(
+            'mbfs',
+            sprintf(
+                'if (window.mbFrontendForm) { window.mbFrontendForm.recaptchaKey = window.mbFrontendForm.recaptchaKey || %s; window.mbFrontendForm.captchaExecuteError = window.mbFrontendForm.captchaExecuteError || %s; }',
+                json_encode($recaptchaV3SiteKey),
+                json_encode(__('Error trying to execute grecaptcha.', 'tghpcontact'))
+            )
+        );
+    }
 
     if ($metabox->button_class) {
         $output = preg_replace('/(<button.*?rwmb-button)/', "$1 {$metabox->button_class}", $output);

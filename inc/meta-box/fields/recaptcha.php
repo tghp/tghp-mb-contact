@@ -18,6 +18,14 @@ if (class_exists('RWMB_Field') && !class_exists('RWMB_Recaptcha_Field')) {
                 return '';
             }
 
+            if (isset($field['version']) && (int) $field['version'] === 3) {
+                // Client side is handled by MB Frontend Submission's native v3
+                // support — tghpcontact_form() passes recaptcha_key to the
+                // [mb_frontend_form] shortcode, MBFS enqueues api.js, executes
+                // grecaptcha on submit and posts the token as mbfs_recaptcha_token
+                return '';
+            }
+
             $randomId = substr(uniqid('', true), -5);
 
             return sprintf(

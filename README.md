@@ -98,7 +98,33 @@ However a site and secret key is provided. The plugin will look for these using 
 * `RECAPTCHA_KEY_SITE_{$formId}`
 * `RECAPTCHA_KEY_SECRET_{$formId}`
 
-So a recaptcha instance and environment variable for each form is required. This is important as only one site/secret key can be used once on page. So if we were to use just one pair, only one form of any ID would be placeable on a page. This way you can place more 
+So a recaptcha instance and environment variable for each form is required. This is important as only one site/secret key can be used once on page. So if we were to use just one pair, only one form of any ID would be placeable on a page. This way you can place more
+
+#### reCAPTCHA v3
+
+v2 (checkbox) is the default. To use v3 (invisible, score-based) for a form, either set an environment variable:
+
+* `RECAPTCHA_VERSION_{$formId}=3`
+
+or set `'version' => 3` on the recaptcha field definition. The env var wins if both are set. Note the site/secret keys are version-specific — a form switched to v3 needs a key pair registered as v3 in the Google reCAPTCHA admin.
+
+Optional score threshold, via env var or field parameter (env wins):
+
+Env | Field parameter | Default | Description
+--- | --- | --- | ---
+`RECAPTCHA_SCORE_THRESHOLD_{$formId}` | `score_threshold` | `0.5` | Minimum score (0–1) for a submission to pass
+
+##### How v3 works here
+
+The client side is delegated to MB Frontend Submission's native v3 support: `tghpcontact_form()` passes the site key to the `[mb_frontend_form]` shortcode as `recaptcha_key`, and MBFS enqueues api.js, executes grecaptcha at submit time (with its hardcoded `mbfs` action) and posts the token as `mbfs_recaptcha_token`. No widget is rendered — the recaptcha field outputs nothing for v3.
+
+Verification stays with this plugin's validator (`recaptcha_secret` is deliberately not passed to MBFS — its own check ignores the score, and siteverify tokens are single-use so only one side can verify). The validator checks success, the `mbfs` action and the score threshold.
+
+Requirements/limitations:
+
+* Requires an MB Frontend Submission version with native v3 support (`recaptcha_key` form config) — added in MBFS 2.1.0 (2020-01-21). Note the internals we rely on (the `mbfs_recaptcha_token` field name and hardcoded `mbfs` action) were verified against MBFS 4.4.2; very old MBFS builds may differ
+* One v3 key pair per page — MBFS localises a single `mbFrontendForm.recaptchaKey` global, so multiple v3 forms on one page must share a key pair (v2 + v3 forms can coexist)
+* Google's v3 badge appears bottom-right of the page; if you hide it with CSS you must include Google's disclosure text near the form
 
 ### JavaScript
 #### Message event

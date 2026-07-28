@@ -74,6 +74,22 @@ function tghpcontact_meta_boxes($meta_boxes)
             if ($field['type'] === 'recaptcha') {
                 $field['site_key'] = $_ENV[sprintf('RECAPTCHA_KEY_SITE_%s', strtoupper($_formID))];
                 $field['secret_key'] = $_ENV[sprintf('RECAPTCHA_KEY_SECRET_%s', strtoupper($_formID))];
+
+                $versionEnvKey = sprintf('RECAPTCHA_VERSION_%s', strtoupper($_formID));
+
+                if (isset($_ENV[$versionEnvKey])) {
+                    $field['version'] = (int) $_ENV[$versionEnvKey];
+                } else if (!isset($field['version'])) {
+                    $field['version'] = 2;
+                }
+
+                $scoreThresholdEnvKey = sprintf('RECAPTCHA_SCORE_THRESHOLD_%s', strtoupper($_formID));
+
+                if (isset($_ENV[$scoreThresholdEnvKey])) {
+                    $field['score_threshold'] = (float) $_ENV[$scoreThresholdEnvKey];
+                } else if (!isset($field['score_threshold'])) {
+                    $field['score_threshold'] = 0.5;
+                }
             }
 
             if (isset($field['id']) && isset($field['populate_after_error']) && $field['populate_after_error'] !== false &&
